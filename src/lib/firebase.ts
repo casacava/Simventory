@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app"
 import { getFirestore } from "firebase/firestore"
-import { getAuth } from "firebase/auth"
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth"
+// import { error } from "console";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -15,5 +16,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 const auth = getAuth(app)
+const provider = new GoogleAuthProvider()
 
-export { db, auth }
+const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider)
+    console.log("User Info", result.user)
+  } catch (error) {
+    console.error("error signing in", error)
+  }
+}
+
+const logout = async () => {
+  try {
+    await signOut(auth)
+    console.log("user signed out")
+  } catch (error) {
+    console.error("errro signing out", error)
+  }
+}
+
+export { db, auth, signInWithGoogle, logout }
