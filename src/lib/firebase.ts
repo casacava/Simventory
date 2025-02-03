@@ -1,7 +1,6 @@
 import { initializeApp } from "firebase/app"
-import { getFirestore } from "firebase/firestore"
+import { getFirestore, doc, setDoc, getDoc, updateDoc } from "firebase/firestore"
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth"
-// import { error } from "console";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -10,7 +9,7 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-};
+}
 
 
 const app = initializeApp(firebaseConfig)
@@ -36,4 +35,15 @@ const logout = async () => {
   }
 }
 
-export { db, auth, signInWithGoogle, logout }
+const saveCollection = async (userId: string, collectionId: string, updatedCollection: Record<string, boolean>) => {
+  const userRef = doc(db, "users", userId, "collections", collectionId )
+  await setDoc(userRef, updatedCollection, { merge: true })
+}
+
+const getCollection = async (userId: string, collectionId: string) => {
+  const userRef = doc(db, "users", userId, "collections", collectionId)
+  const docSnap = await getDoc(userRef)
+  return docSnap.exists() ? docSnap.data() : {}
+}
+
+export { db, auth, signInWithGoogle, logout, saveCollection, getCollection, }
