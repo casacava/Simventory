@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { auth, signInWithGoogle, logout, saveCollection, getCollection } from "@/lib/firebase"
 import { onAuthStateChanged, User } from "firebase/auth"
+import { Button, Card, CardContent, Typography, CircularProgress, Box } from "@mui/material"
 
 const COLLECTION_ID = "fishCollection"
 
@@ -11,7 +12,7 @@ const DEFAULT_COLLECTION = {
   "Rare Fish": false,
   "Exotic Gem": false,
   "Unique Plant": false,
-};
+}
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null)
@@ -50,40 +51,58 @@ export default function Home() {
     const updatedCollection = { ...collection, [item]: !collection[item] }
     setCollection(updatedCollection)
     await saveCollection(user.uid, COLLECTION_ID, updatedCollection)
-  };
+  }
+
+  const collectedCount = Object.values(collection).filter((v) => v).length
+  const totalCount = Object.keys(collection).length
+  const completionPercentage = Math.round((collectedCount / totalCount) * 100)
 
   if (loading) return <p className="text-center text-gray-500">Loading...</p>
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-3xl font-bold mb-4">Sims Collection Tracker</h1>
+    <Box className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-8">
+      <Typography variant="h3" className="font-bold mb-6">
+        Sims Collection Tracker
+      </Typography>
 
       {user ? (
-        <div className="mb-4">
-          <p>Welcome, {user.displayName}!</p>
-          <button onClick={logout} className="bg-red-500 text-white p-2 rounded-md">
+        <>
+          <Typography variant="h6" className="mb-2">
+            Welcome, {user.displayName}!
+          </Typography>
+          <Button variant="contained" color="error" onClick={logout} className="mb-4">
             Sign Out
-          </button>
+          </Button>
 
-          <ul className="mt-4 space-y-2">
+          <Box className="flex items-center gap-3 mt-4">
+            <CircularProgress variant="determinate" value={completionPercentage} />
+            <Typography>{completionPercentage}% Completed</Typography>
+          </Box>
+
+          <Box className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {Object.keys(collection).map((item) => (
-              <li
+              <Card
                 key={item}
-                className={`p-3 border rounded-lg cursor-pointer ${
-                  collection[item] ? "bg-green-300" : "bg-white"
-                }`}
                 onClick={() => toggleItem(item)}
+                className="cursor-pointer transition-transform"
+                sx={{
+                  backgroundColor: collection[item] ? "#86efac" : "white",
+                  "&:hover": { transform: "scale(1.05)" },
+                }}
               >
-                {item} {collection[item] ? "✅" : ""}
-              </li>
+                <CardContent>
+                  <Typography variant="h6">{item}</Typography>
+                </CardContent>
+                
+              </Card>
             ))}
-          </ul>
-        </div>
+          </Box>
+        </>
       ) : (
-        <button onClick={signInWithGoogle} className="bg-blue-500 text-white p-2 rounded-md">
+        <Button variant="contained" color="primary" onClick={signInWithGoogle}>
           Sign In with Google
-        </button>
+        </Button>
       )}
-    </div>
+    </Box>
   )
 }
