@@ -1,7 +1,26 @@
 "use client"
 import { Box, Button, Typography } from "@mui/material"
-import { signInWithGoogle } from "@/lib/firebase"
+import { signInWithGoogle, auth } from "@/lib/firebase"
+import { useEffect, useState } from "react"
+import { onAuthStateChanged, User } from "firebase/auth"
+import { useRouter } from "next/navigation"
+
 export default function Home() {
+  const [user, setUser] = useState<User | null>(null)
+  const router = useRouter()
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        router.push("/collections")
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router])
+
+
   return (
     <Box
       sx={{
@@ -25,14 +44,17 @@ export default function Home() {
         crystals & elements collections. Simply click on items your sim has already collected and see how much progress you have made completing the collection.
       </Typography>
 
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ mt: 4 }}
-        onClick={signInWithGoogle}
-      >
-        Sign In with Google
-      </Button>
+      {/* Google Sign-In Button (Only Show if User is Not Logged In) */}
+      {!user && (
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ mt: 4, padding: "10px 20px", fontSize: "1rem" }}
+          onClick={signInWithGoogle}
+        >
+          Sign In with Google
+        </Button>
+      )}
     </Box>
   )
 }
