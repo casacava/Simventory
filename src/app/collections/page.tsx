@@ -1,6 +1,6 @@
 "use client"
 
-import {useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { auth, logout } from "@/lib/firebase"
 import { onAuthStateChanged, User } from "firebase/auth"
 import { Box, Typography, Button, Grid, Card, CardContent } from "@mui/material"
@@ -21,11 +21,20 @@ export default function CollectionPage() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentuUser) => {
-      setUser(currentuUser)
+      if (!currentuUser) {
+        router.push('/')
+      } else {
+        setUser(currentuUser)
+      }
     })
 
     return () => unsubscribe()
-  }, [])
+  }, [router])
+
+  const handleLogout = async () => {
+    await logout()
+    router.push('/')
+  }
 
   return (
     <Box
@@ -43,7 +52,7 @@ export default function CollectionPage() {
     >
       {/* Logout Button */}
       <Box sx={{ position: "absolute", top: 16, left: 16 }}>
-        <Button variant="contained" color="error" onClick={logout}>
+        <Button variant="contained" color="error" onClick={handleLogout}>
           Logout
         </Button>
       </Box>
