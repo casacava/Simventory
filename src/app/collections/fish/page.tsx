@@ -14,29 +14,28 @@ const categoryRoutes = ["/collections/fish", "/collections/gardening", "/collect
 export default function FishCollectionPage() {
   const [user, setUser] = useState<User | null>(null)
   const [collection, setCollection] = useState<Array<{ id: number; name: string; description: string; collected: boolean }>>(fishCollection)
-  const [loading, setLoading] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (!currentUser) {
         router.push("/")
-      } else {
-        setUser(currentUser)
-
-        // Fetch saved collection from Firestore
-        const savedCollection = await getCollection(currentUser.uid, "fishCollection")
-        if (savedCollection && Array.isArray(savedCollection)) {
-          setCollection(savedCollection)
-        } else {
-          setCollection(fishCollection)
-        }
+        return
       }
-      setLoading(false)
+  
+      setUser(currentUser)
+  
+      if (currentUser.uid) {
+        const savedCollection = await getCollection(currentUser.uid, "fishCollection")
+  
+        if (Array.isArray(savedCollection) && savedCollection.length > 0) {
+          setCollection(savedCollection)
+        } else setCollection(fishCollection)
+      }
     })
-
-    return () => unsubscribe()
-  }, [router])
+  
+    return () => unsubscribe();
+  }, [router])  
 
   const handleToggleItem = async (id: number) => {
     if (!user) return;
@@ -66,11 +65,8 @@ export default function FishCollectionPage() {
         padding: "20px",
         textAlign: "center",
       }}
-    >
-      {/* Logout Button */}
-      
-        <CollectionHeader />
-      
+    > 
+        <CollectionHeader /> 
 
       {/* Category Tabs */}
       <Tabs
@@ -122,6 +118,4 @@ export default function FishCollectionPage() {
       </Grid>
     </Box>
   )
-
-
 }
