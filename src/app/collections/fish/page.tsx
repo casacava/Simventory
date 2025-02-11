@@ -1,11 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { auth, logout, saveCollection, getCollection } from "@/lib/firebase"
+import { auth, saveCollection, getCollection } from "@/lib/firebase"
 import { onAuthStateChanged, User } from "firebase/auth"
-import { Box, Typography, Button, Tabs, Tab, LinearProgress, Grid, Card, CardContent } from "@mui/material"
+import { Box, Typography, Tabs, Tab, LinearProgress, Grid, Card, CardContent } from "@mui/material"
 import { useRouter } from "next/navigation"
 import { fishCollection } from "@/lib/collections"
+import CollectionHeader from "@/components/CollectionHeader"
 
 const categories = ["Fish", "Gardening", "Fossils", "Crystals + Elements"]
 const categoryRoutes = ["/collections/fish", "/collections/gardening", "/collections/fossils", "/collections/crystals"]
@@ -67,11 +68,9 @@ export default function FishCollectionPage() {
       }}
     >
       {/* Logout Button */}
-      <Box sx={{ position: "absolute", top: 16, right: 16 }}>
-        <Button variant="contained" color="error" onClick={logout}>
-          Logout
-        </Button>
-      </Box>
+      
+        <CollectionHeader />
+      
 
       {/* Category Tabs */}
       <Tabs
