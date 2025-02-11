@@ -20,6 +20,7 @@ export default function FishCollectionPage() {
     description: string;
     collected: boolean;
     image: string;
+    rarity: string;
   }>>(fishCollection)  
   const router = useRouter()
 
@@ -36,8 +37,18 @@ export default function FishCollectionPage() {
         const savedCollection = await getCollection(currentUser.uid, "fishCollection")
   
         if (Array.isArray(savedCollection) && savedCollection.length > 0) {
-          setCollection(savedCollection)
-        } else setCollection(fishCollection)
+          // ✅ Merge new fish with existing Firestore data
+          const updatedCollection = fishCollection.map((fish) => {
+            const savedFish = savedCollection.find((item) => item.name === fish.name)
+            return savedFish ? { ...fish, collected: savedFish.collected } : fish
+          });
+        
+          setCollection(updatedCollection)
+          await saveCollection(currentUser.uid, "fishCollection", updatedCollection) // ✅ Save updated data
+        } else {
+          setCollection(fishCollection) // ✅ Use default collection if empty
+          await saveCollection(currentUser.uid, "fishCollection", fishCollection) // ✅ Store the full list in Firestore
+        }
       }
     })
   
@@ -125,6 +136,7 @@ export default function FishCollectionPage() {
                 />
                 <Typography variant="h6">{item.name}</Typography>
                 <Typography variant="body2">{item.description}</Typography>
+                <Typography variant="body2">{item.rarity}</Typography>
               </CardContent>
             </Card>
           </Grid>
