@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react"
 import { auth, saveCollection, getCollection } from "@/lib/firebase"
 import { onAuthStateChanged, User } from "firebase/auth"
-import { Box, Typography, Tabs, Tab, LinearProgress, Grid, Card, CardContent } from "@mui/material"
+import { Box, Typography, Tabs, Tab, Grid, Card, CardContent } from "@mui/material"
 import { useRouter } from "next/navigation"
 import { fishCollection } from "@/lib/collections"
 import CollectionHeader from "@/components/CollectionHeader"
 import Image from "next/image"
+import CollectionProgress from "@/components/CollectionProgress"
 
 const categories = ["Fish", "Gardening", "Fossils", "Crystals + Elements"]
 const categoryRoutes = ["/collections/fish", "/collections/gardening", "/collections/fossils", "/collections/crystals"]
@@ -37,17 +38,16 @@ export default function FishCollectionPage() {
         const savedCollection = await getCollection(currentUser.uid, "fishCollection")
   
         if (Array.isArray(savedCollection) && savedCollection.length > 0) {
-          // ✅ Merge new fish with existing Firestore data
           const updatedCollection = fishCollection.map((fish) => {
             const savedFish = savedCollection.find((item) => item.name === fish.name)
             return savedFish ? { ...fish, collected: savedFish.collected } : fish
-          });
+          })
         
           setCollection(updatedCollection)
-          await saveCollection(currentUser.uid, "fishCollection", updatedCollection) // ✅ Save updated data
+          await saveCollection(currentUser.uid, "fishCollection", updatedCollection)
         } else {
-          setCollection(fishCollection) // ✅ Use default collection if empty
-          await saveCollection(currentUser.uid, "fishCollection", fishCollection) // ✅ Store the full list in Firestore
+          setCollection(fishCollection)
+          await saveCollection(currentUser.uid, "fishCollection", fishCollection)
         }
       }
     })
@@ -68,7 +68,6 @@ export default function FishCollectionPage() {
 
   const collectedCount = collection.filter((item) => item.collected).length
   const totalCount = collection.length
-  const completionPercentage = Math.round((collectedCount / totalCount) * 100)
 
   return (
     <Box
@@ -107,10 +106,7 @@ export default function FishCollectionPage() {
       </Tabs>
 
       {/* Progress Bar */}
-      <Box sx={{ width: "60%", mt: 3 }}>
-        <LinearProgress variant="determinate" value={completionPercentage} sx={{ height: "10px", borderRadius: "5px" }} />
-        <Typography sx={{ mt: 1 }}>{collectedCount}/{totalCount} items collected</Typography>
-      </Box>
+      <CollectionProgress collectedCount={collectedCount} totalCount={totalCount} />
 
       {/* Collection Grid */}
       <Grid container spacing={3} justifyContent="center" sx={{ maxWidth: 900, mt: 4 }}>
