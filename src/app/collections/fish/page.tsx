@@ -7,13 +7,20 @@ import { Box, Typography, Tabs, Tab, LinearProgress, Grid, Card, CardContent } f
 import { useRouter } from "next/navigation"
 import { fishCollection } from "@/lib/collections"
 import CollectionHeader from "@/components/CollectionHeader"
+import Image from "next/image"
 
 const categories = ["Fish", "Gardening", "Fossils", "Crystals + Elements"]
 const categoryRoutes = ["/collections/fish", "/collections/gardening", "/collections/fossils", "/collections/crystals"]
 
 export default function FishCollectionPage() {
   const [user, setUser] = useState<User | null>(null)
-  const [collection, setCollection] = useState<Array<{ id: number; name: string; description: string; collected: boolean }>>(fishCollection)
+  const [collection, setCollection] = useState<Array<{ 
+    id: number;
+    name: string;
+    description: string;
+    collected: boolean;
+    image: string;
+  }>>(fishCollection)  
   const router = useRouter()
 
   useEffect(() => {
@@ -108,7 +115,14 @@ export default function FishCollectionPage() {
               }}
               onClick={() => handleToggleItem(item.id)}
             >
-              <CardContent>
+              <CardContent sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  width={80}
+                  height={80}
+                  style={{ objectFit: "contain", marginBottom: "8px" }}
+                />
                 <Typography variant="h6">{item.name}</Typography>
                 <Typography variant="body2">{item.description}</Typography>
               </CardContent>

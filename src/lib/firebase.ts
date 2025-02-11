@@ -37,7 +37,12 @@ const logout = async () => {
 
 const saveCollection = async (userId: string, collectionId: string, updatedCollection: any[]) => {
   const userRef = doc(db, "users", userId, "collections", collectionId)
-  await setDoc(userRef, { items: updatedCollection }, { merge: false })
+  await setDoc(userRef, {
+    items: updatedCollection.map((item) => ({
+      ...item,
+      image: item.image || "/fish-icons/TS4_Goldfish.png",
+    })),
+  }, { merge: false })  
 }
 
 const getCollection = async (userId: string, collectionId: string) => {
@@ -46,7 +51,12 @@ const getCollection = async (userId: string, collectionId: string) => {
 
   if (docSnap.exists()) {
     const data = docSnap.data()
-    return data?.items && Array.isArray(data.items) ? data.items : []
+    return data?.items && Array.isArray(data.items)
+  ? data.items.map((item) => ({
+      ...item,
+      image: item.image || "/fish-icons/TS4_Goldfish.png",
+    }))
+  : []
   }
 
   return []
