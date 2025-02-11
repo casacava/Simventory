@@ -113,9 +113,9 @@ export default function FishCollectionPage() {
       </Box>
 
       {/* Collection Grid */}
-      <Grid container spacing={2} sx={{ maxWidth: 800, mt: 4 }}>
+      <Grid container spacing={3} justifyContent="center" sx={{ maxWidth: 900, mt: 4 }}>
         {collection.map((item) => (
-          <Grid item xs={6} sm={4} md={3} key={item.id}>
+          <Grid item xs={6} sm={4} md={3} key={item.id} sx={{ padding: "8px" }}>
             <Card
               sx={{
                 backgroundColor: item.collected ? "#A2D2A6" : "#F5F5F5",
@@ -123,6 +123,14 @@ export default function FishCollectionPage() {
                 cursor: "pointer",
                 transition: "0.2s",
                 "&:hover": { transform: "scale(1.05)" },
+                width: "180px",
+                height: "300px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "12px",
+                textAlign: "center",
               }}
               onClick={() => handleToggleItem(item.id)}
             >
@@ -136,7 +144,7 @@ export default function FishCollectionPage() {
                 />
                 <Typography variant="h6">{item.name}</Typography>
                 <Typography variant="body2">{item.description}</Typography>
-                <Typography variant="body2">{item.rarity}</Typography>
+                <Typography variant="body2" sx={{ color: "#262626", fontWeight: "bold" }}>{item.rarity}</Typography>
               </CardContent>
             </Card>
           </Grid>
