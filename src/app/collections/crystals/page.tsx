@@ -1,3 +1,3 @@
 export default function CrystalPage() {
-  return <h1>Crystak Collection Page</h1>;
+  return <h1>Crystal Collection Page</h1>;
 }
