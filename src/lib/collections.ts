@@ -53,3 +53,9 @@ export const fishCollection = [
   { id: 52, name: "Golden Mahi Mahi", description: "They are distinguished by dazzling colors, in this case GOLD!", rarity: "Rare", image: "/fish-icons/TS4_Goldfish.png", collected: false },
   { id: 53, name: "Luna Fish", description: "A fanged fish blessed by the power of the moonlit waters of Moonwood Mill.", rarity: "Uncommon", image: "/fish-icons/TS4_Goldfish.png", collected: false }
 ]
+
+export const crystalsCollection = [
+  { id: 1, name: "Alabaster", description: "A fine-grained variety of gypsum, used for decorative carvings.", rarity: "Common", image: "/crystal-icons/crystal-alabaster.png", collected: false },
+  { id: 2, name: "Diamond", description: "One of the hardest known minerals, often used in jewelry.", rarity: "Rare", image: "/crystal-icons/crystal-alabaster.png", collected: false },
+  { id: 3, name: "Emerald", description: "A green gemstone that symbolizes rebirth and prosperity.", rarity: "Uncommon", image: "/crystal-icons/crystal-alabaster.png", collected: false }
+]
