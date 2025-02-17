@@ -35,15 +35,31 @@ const logout = async () => {
   }
 }
 
-const saveCollection = async (userId: string, collectionId: string, updatedCollection: Record<string, boolean>) => {
-  const userRef = doc(db, "users", userId, "collections", collectionId )
-  await setDoc(userRef, updatedCollection, { merge: true })
+const saveCollection = async (userId: string, collectionId: string, updatedCollection: any[]) => {
+  const userRef = doc(db, "users", userId, "collections", collectionId)
+  await setDoc(userRef, {
+    items: updatedCollection.map((item) => ({
+      ...item,
+      image: item.image || "/fish-icons/TS4_Goldfish.png",
+    })),
+  }, { merge: false })  
 }
 
 const getCollection = async (userId: string, collectionId: string) => {
   const userRef = doc(db, "users", userId, "collections", collectionId)
   const docSnap = await getDoc(userRef)
-  return docSnap.exists() ? docSnap.data() : {}
+
+  if (docSnap.exists()) {
+    const data = docSnap.data()
+    return data?.items && Array.isArray(data.items)
+  ? data.items.map((item) => ({
+      ...item,
+      image: item.image || "/fish-icons/TS4_Goldfish.png",
+    }))
+  : []
+  }
+
+  return []
 }
 
 export { db, auth, signInWithGoogle, logout, saveCollection, getCollection, }
