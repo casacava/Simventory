@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app"
-import { getFirestore, doc, setDoc, getDoc, updateDoc } from "firebase/firestore"
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore"
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth"
 
 const firebaseConfig = {
@@ -35,31 +35,21 @@ const logout = async () => {
   }
 }
 
-const saveCollection = async (userId: string, collectionId: string, updatedCollection: any[]) => {
-  const userRef = doc(db, "users", userId, "collections", collectionId)
-  await setDoc(userRef, {
-    items: updatedCollection.map((item) => ({
-      ...item,
-      image: item.image || "/fish-icons/TS4_Goldfish.png",
-    })),
-  }, { merge: false })  
-}
-
 const getCollection = async (userId: string, collectionId: string) => {
   const userRef = doc(db, "users", userId, "collections", collectionId)
   const docSnap = await getDoc(userRef)
 
   if (docSnap.exists()) {
     const data = docSnap.data()
-    return data?.items && Array.isArray(data.items)
-  ? data.items.map((item) => ({
-      ...item,
-      image: item.image || "/fish-icons/TS4_Goldfish.png",
-    }))
-  : []
+    return data?.items || []
   }
 
   return []
+}
+
+const saveCollection = async (userId: string, collectionId: string, updatedCollection: any[]) => {
+  const userRef = doc(db, "users", userId, "collections", collectionId)
+  await setDoc(userRef, { items: updatedCollection }, { merge: true })
 }
 
 export { db, auth, signInWithGoogle, logout, saveCollection, getCollection, }

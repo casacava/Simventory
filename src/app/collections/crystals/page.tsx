@@ -21,32 +21,37 @@ export default function CrystalPage() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (!currentUser) {
-        router.push("/");
+        router.push("/")
       } else {
-        setUser(currentUser);
-        const savedCollection = await getCollection(currentUser.uid, "crystalsCollection");
-        if (Array.isArray(savedCollection)) {
-          setCollection(savedCollection);
-        }
-      }
-    });
+        setUser(currentUser)
+        const savedCollection = await getCollection(currentUser.uid, "crystalsCollection")
 
-    return () => unsubscribe();
-  }, [router]);
+        if (Array.isArray(savedCollection) && savedCollection.length > 0) {
+          setCollection(savedCollection)
+        } else {
+          setCollection(crystalsCollection)
+          await saveCollection(currentUser.uid, "crystalsCollection", crystalsCollection)
+        }
+
+      }
+    })
+
+    return () => unsubscribe()
+  }, [router])
 
   const handleToggleItem = async (id: number) => {
     if (!user) return;
 
     const updatedCollection = collection.map((item) =>
       item.id === id ? { ...item, collected: !item.collected } : item
-    );
-    setCollection(updatedCollection);
+    )
+    setCollection(updatedCollection)
 
-    await saveCollection(user.uid, "crystalsCollection", updatedCollection);
-  };
+    await saveCollection(user.uid, "crystalsCollection", updatedCollection)
+  }
 
-  const collectedCount = collection.filter((item) => item.collected).length;
-  const totalCount = collection.length;
+  const collectedCount = collection.filter((item) => item.collected).length
+  const totalCount = collection.length
 
   return (
     <Box
