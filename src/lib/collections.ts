@@ -92,3 +92,11 @@ export const gardeningCollection = [
   { id: 5, name: "Cowplant Berry", description: "A mysterious seed that grows into the infamous Cowplant.", rarity: "Rare", image: "/gardening-icons/AppleTS4.png", collected: false },
   // Add remaining plants later...
 ]
+export const fossilsCollection = [
+  { id: 1, name: "Prehistoric Rock", description: "A simple rock from prehistoric times. Not much to see here.", rarity: "Common", image: "/fossil-icons/PrehistoricRockFossil.png", collected: false },
+  { id: 2, name: "Raptor Claw", description: "A claw from a long-extinct raptor. A reminder of a ferocious past.", rarity: "Uncommon", image: "/fossil-icons/PrehistoricRockFossil.png", collected: false },
+  { id: 3, name: "Fossilized Egg", description: "A perfectly preserved egg, possibly containing an ancient surprise.", rarity: "Rare", image: "/fossil-icons/PrehistoricRockFossil.png", collected: false },
+  { id: 4, name: "Fossilized Sea Monster", description: "The remains of a once-massive sea creature from prehistoric oceans.", rarity: "Rare", image: "/fossil-icons/PrehistoricRockFossil.png", collected: false },
+  { id: 5, name: "Fossilized Plant", description: "A delicate leaf fossil, showing traces of ancient flora.", rarity: "Common", image: "/fossil-icons/PrehistoricRockFossil.png", collected: false },
+  // Add remaining fossils later...
+]
