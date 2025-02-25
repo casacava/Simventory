@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { auth, saveCollection, getCollection } from "@/lib/firebase"
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth"
 import { Box, Grid, Card, CardContent, Typography, Tabs, Tab } from "@mui/material"
 import { useRouter } from "next/navigation"
 import { gardeningCollection } from "@/lib/collections"
