@@ -83,3 +83,12 @@ export const crystalsCollection = [
   { id: 26, name: "Moonstone", description: "Moonstone produces a characteristic bluish interior light called schiller, which derived its name.", rarity: "Uncommon", image: "/crystal-icons/crystal-alabaster.png", collected: false },
   { id: 27, name: "Amber", description: "The fossilized sap of ancient trees, Amber's translucent golden color looks like delicious honey—but you mustn't eat it. It is forbidden.", rarity: "Rare", image: "/crystal-icons/crystal-alabaster.png", collected: false }
 ]
+
+export const gardeningCollection = [
+  { id: 1, name: "Apple", description: "A juicy red fruit that grows on trees.", rarity: "Common", image: "/gardening-icons/AppleTS4.png", collected: false },
+  { id: 2, name: "Carrot", description: "A bright orange root vegetable loved by rabbits.", rarity: "Common", image: "/gardening-icons/AppleTS4.png", collected: false },
+  { id: 3, name: "Grape", description: "A small, sweet fruit that can be eaten fresh or made into juice.", rarity: "Uncommon", image: "/gardening-icons/AppleTS4.png", collected: false },
+  { id: 4, name: "Dragonfruit", description: "A rare and exotic fruit known for its bright pink skin and sweet taste.", rarity: "Rare", image: "/gardening-icons/AppleTS4.png", collected: false },
+  { id: 5, name: "Cowplant Berry", description: "A mysterious seed that grows into the infamous Cowplant.", rarity: "Rare", image: "/gardening-icons/AppleTS4.png", collected: false },
+  // Add remaining plants later...
+]
